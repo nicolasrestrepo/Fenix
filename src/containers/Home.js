@@ -29,7 +29,8 @@ class Home extends Component {
       wallets: [],
       messageAlert: '',
       tittleAlert: '',
-      loading: true
+      loading: true,
+      avatar: ''
     }
     this.toggle = this.toggle.bind(this)
     this.updateMenu = this.updateMenu.bind(this)
@@ -55,11 +56,13 @@ class Home extends Component {
         Actions.SignIn()
       } else {
         const dataUser = await api.user.getInfo(accessToken)
+        console.log('dataUser', dataUser)
         this.setState({
           userName: dataUser.data.userName,
           wallets: dataUser.data.wallets.data,
           id: dataUser.data._id,
           accessToken,
+          avatar: dataUser.data.avatar,
           loading: false
         })
       }
@@ -133,6 +136,7 @@ class Home extends Component {
         menu={<Menu
           userName={this.state.userName}
           id={this.state.id}
+          avatar={this.state.avatar}
         />}
         isOpen={this.state.isOpen}
         menuPosition='right'

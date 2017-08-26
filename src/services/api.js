@@ -44,7 +44,7 @@ const api = {
         }
     },
     user: {
-        async completeProfile(token, gender, number) {
+        async completeProfile(token, gender, number, imgBase64) {
             console.log('token in api', token)
             const response = await fetch(baseUrl + '/me',{
                 method: 'PUT',
@@ -55,7 +55,8 @@ const api = {
                 },
                 body: JSON.stringify({
                     gender: gender,
-                    phone: number
+                    phone: number,
+                    avatar: imgBase64
                 })
             })
         },
@@ -83,7 +84,7 @@ const api = {
             const data = await response.json()
             console.log('data', data)
             return data
-        } 
+        }
     },
     payments: {
         async transfer(token, from, to, amounts) {

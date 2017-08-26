@@ -9,13 +9,16 @@ import {
   Button,
   Picker,
   AsyncStorage,
-  ActivityIndicator
+  ActivityIndicator,
+  Alert,
+  TouchableOpacity,
+  Platform,
 } from 'react-native';
 
 import { Actions } from 'react-native-router-flux';
-import Upload from './shared/uploadImg';
 import api from '../services/api';
-
+import ImagePicker from 'react-native-image-picker';
+import imgCamera from '../statics/images/2017_fenix-imgs-camera.png'
 const ACCESS_TOKEN = 'access_token';
 
 class CompleteProfile extends Component {
@@ -28,6 +31,8 @@ class CompleteProfile extends Component {
       accessToken: '',
       userName: '',
       userId: '',
+      avatar: imgCamera,
+      imgBase64: ''
     }
     this.handle = this.handle.bind(this)
   }
@@ -42,7 +47,6 @@ class CompleteProfile extends Component {
         Actions.SignIn()
       } else {
         const dataUser = await api.user.getInfo(accessToken)
-        console.log(dataUser)
         this.setState({
           accessToken, 
           userName: dataUser.data.userName, 
@@ -56,14 +60,51 @@ class CompleteProfile extends Component {
   }
   async handle(){
     try{
-    const data = await api.user.completeProfile(this.state.accessToken, this.state.genero, this.state.numberCel)
+    const data = await api.user.completeProfile(this.state.accessToken, 
+      this.state.genero, this.state.numberCel, this.state.imgBase64)
      Actions.Home()
     }catch(err){
       console.log('err', err)
     }
   }
+  selectPhotoTapped() {
+    const options = {
+      quality: 1.0,
+      maxWidth: 500,
+      maxHeight: 500,
+      storageOptions: {
+        skipBackup: true
+      }
+    };
+     ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response);
+
+      if (response.didCancel) {
+        console.log('User cancelled photo picker');
+      }
+      else if (response.error) {
+        console.log('ImagePicker Error: ', response.error);
+      }
+      else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton);
+      }
+      else {
+        var source, temp;
+        temp = response.data;
+        if (Platform.OS === 'android') {
+          source = {uri: response.uri, isStatic: true};
+        } else {
+          source = {uri: response.uri.replace('file://', ''), isStatic: true};
+        }
+        this.setState({
+          avatar: source,
+          imgBase64: `data:image/png;base64,${temp}`,
+        });
+      }
+    });
+  }
   render() {
-     console.log('token', this.state.accessToken)
+    
       return (
       <View style={styles.container}>
         <View style={styles.imgLogo}>
@@ -76,7 +117,11 @@ class CompleteProfile extends Component {
           Hola {this.state.userName}  completa tu perfil
           </Text>
         <View>
-           <Upload /> 
+           <TouchableOpacity onPress={this.selectPhotoTapped.bind(this)}>
+            <View style={styles.avatar}>
+              <Image style={styles.avatarImg} source={this.state.avatar} />
+            </View>
+          </TouchableOpacity>    
         </View>
         <View style={styles.form}>
           <View>
@@ -205,6 +250,16 @@ const styles = StyleSheet.create({
     height: 35,
     paddingTop: 10,
     backgroundColor: '#609fbf',
+  },
+  avatarImg: {
+    borderRadius: 50,
+    width: 60,
+    height: 60
+  },
+  avatar: {
+    borderRadius: 50,
+    width: 60,
+    height: 60
   }
 })
 export default CompleteProfile;

@@ -67,9 +67,7 @@ class Upload extends Component {
     });
   }
 
-
-
- async upload(){
+ /* async upload(){
     const response = await fetch('http://ec2-34-210-46-90.us-west-2.compute.amazonaws.com:8042/api/v1/me', {
                 method: 'PUT',
                 headers: {
@@ -83,52 +81,8 @@ class Upload extends Component {
             })
     const data = await response.json()
     console.log(data)          
-}
+} */
  
-
-
-
-/*   uplo(){
-  
-    var obj = {
-        uploadUrl: 'http://ec2-34-210-46-90.us-west-2.compute.amazonaws.com:8042/api/v1/me',
-        method: 'PUT', // default 'POST',support 'POST' and 'PUT'
-        headers: {
-          'Accept': 'application/json',"headers": {
-          "authorization": "Bearer pN2gCfBhl2W5k0ZVH4HeMpVH9BYj5coOgpN4kRdGlu4FOOsp9Jj0g0H6fMX7PvjhgZqdduYGvJiKQLVKkHsl8eFAA702pZxv8ZrQmDOhWrKyCBYVOKIDfSskje3JYYRnDAB36oIoL3Wb0safazbMEl0aUcfof2xox4BV2csjVMDcHX2YWuu5a8tSyg4tOj7fkvKmPQiwEwdnKIn9OntzUgcPABqu7Ca0TII1fUM1NsaRSE8F0ZmyvJnT8Zr0smF1",
-
-           },
-        },
-        fields: {
-          'avatar': this.state.imgBase64,
-        },
-        files: [
-
-        ]
-
-    };
-    FileUpload.upload(obj, function(err, result) {
-      console.log('upload:', err, result);
-      if (err == null){
-        Alert.alert(
-          'Thong Bao',
-          'Upload thanh cong',
-          [
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ]
-        )
-      }else{
-        Alert.alert(
-          'Thong Bao',
-          err,
-          [
-            {text: 'OK', onPress: () => console.log('OK Pressed')},
-          ]
-        )
-      }
-
-    })
-  } */
   render(){
     console.log('img', this.state.imgBase64, 'avatar', this.state.avatar)
     return(

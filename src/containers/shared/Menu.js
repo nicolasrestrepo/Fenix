@@ -23,9 +23,10 @@ class Menu extends Component {
         this.logOut = this.logOut.bind(this)
         this.redirect = this.redirect.bind(this)
     }
-
+    
     redirect(){
         Actions.Home()
+        
     }
 
      logOut() {
@@ -36,13 +37,12 @@ class Menu extends Component {
         )
     }
     render() {
+        console.log(`data:image/jpeg;base64,${this.props.avatar}`)
         return (
             <View style={styles.container}>
                 <View style={styles.infoUser}>
-                    <Icon
-                        name="user-circle"
-                        color="#609fbf"
-                        size={50}
+                   <Image
+                     source={{uri: `data:image/jpeg;base64,${this.props.avatar}`}}
                     />
                     <Text style={styles.textInfo}>{this.props.userName}</Text>
                     <Text style={styles.textInfo}>{this.props.id}</Text>
