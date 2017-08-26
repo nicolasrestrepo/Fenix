@@ -45,7 +45,7 @@ const api = {
     },
     user: {
         async completeProfile(token, gender, number, imgBase64) {
-            console.log('token in api', token)
+            console.log('img', imgBase64)
             const response = await fetch(baseUrl + '/me',{
                 method: 'PUT',
                  headers: {
@@ -56,7 +56,7 @@ const api = {
                 body: JSON.stringify({
                     gender: gender,
                     phone: number,
-                    avatar: imgBase64
+                    avatar: 'data:image/png;base64,' + imgBase64
                 })
             })
         },

@@ -98,7 +98,7 @@ class CompleteProfile extends Component {
         }
         this.setState({
           avatar: source,
-          imgBase64: `data:image/png;base64,${temp}`,
+          imgBase64: temp,
         });
       }
     });

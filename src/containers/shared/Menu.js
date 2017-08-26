@@ -37,12 +37,11 @@ class Menu extends Component {
         )
     }
     render() {
-        console.log(`data:image/jpeg;base64,${this.props.avatar}`)
         return (
             <View style={styles.container}>
                 <View style={styles.infoUser}>
                    <Image
-                     source={{uri: `data:image/jpeg;base64,${this.props.avatar}`}}
+                     source={{uri: this.props.avatar}}
                     />
                     <Text style={styles.textInfo}>{this.props.userName}</Text>
                     <Text style={styles.textInfo}>{this.props.id}</Text>

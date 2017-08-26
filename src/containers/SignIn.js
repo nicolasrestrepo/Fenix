@@ -14,7 +14,6 @@ import {
 
 import { Actions } from 'react-native-router-flux';
 import api from '../services/api';
-
 const ACCESS_TOKEN = 'access_token';
 
 class SignIn extends Component {
