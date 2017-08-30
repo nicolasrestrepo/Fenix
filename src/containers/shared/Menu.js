@@ -36,13 +36,27 @@ class Menu extends Component {
             }
         )
     }
+
+    renderImage() {
+        const { avatar } = this.props;
+        let source = { uri: 'https://facebook.github.io/react/img/logo_og.png' };
+        if(avatar) {
+            source = { uri: avatar }
+        }
+        console.log(source);
+        return (
+            <Image 
+                source={source}
+                style={{width: 400, height: 400}} 
+            />
+        );
+    }
+
     render() {
         return (
             <View style={styles.container}>
                 <View style={styles.infoUser}>
-                   <Image
-                     source={{uri: this.props.avatar}}
-                    />
+                    {this.renderImage()}
                     <Text style={styles.textInfo}>{this.props.userName}</Text>
                     <Text style={styles.textInfo}>{this.props.id}</Text>
                 </View>

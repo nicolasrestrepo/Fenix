@@ -30,7 +30,8 @@ class Home extends Component {
       messageAlert: '',
       tittleAlert: '',
       loading: true,
-      avatar: ''
+      avatar: '',
+      name: ''
     }
     this.toggle = this.toggle.bind(this)
     this.updateMenu = this.updateMenu.bind(this)
@@ -56,11 +57,11 @@ class Home extends Component {
         Actions.SignIn()
       } else {
         const dataUser = await api.user.getInfo(accessToken)
-        console.log('dataUser', dataUser)
         this.setState({
           userName: dataUser.data.userName,
           wallets: dataUser.data.wallets.data,
           id: dataUser.data._id,
+          name: dataUser.data.name,
           accessToken,
           avatar: dataUser.data.avatar,
           loading: false
@@ -78,7 +79,6 @@ class Home extends Component {
     this.setState({ progress: true })
     try {
       const data = await api.user.createNewWallet(this.state.accessToken)
-      console.log(data)
       this.setState({ progress: false })
       if (data.status >= 400) {
         this.setState({

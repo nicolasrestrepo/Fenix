@@ -1,7 +1,7 @@
 
-const baseUrl = 'http://ec2-34-210-46-90.us-west-2.compute.amazonaws.com:8042/api/v1'
-const client_id = '2'
-const client_secret = '5q2UcY4rwEwsOIWk3ssiSBLUBYW3cH3u'
+const baseUrl = 'http://185.39.8.227:3000/api/v1'
+const client_id = '1'
+const client_secret = 'kS3s6Xuv9kgjO3fpkQ6aP9uOebOrQK5L'
 
 const api = {
     authentication: {
@@ -45,7 +45,7 @@ const api = {
     },
     user: {
         async completeProfile(token, gender, number, imgBase64) {
-            console.log('img', imgBase64)
+            
             const response = await fetch(baseUrl + '/me',{
                 method: 'PUT',
                  headers: {
@@ -54,7 +54,7 @@ const api = {
                     'authorization': 'Bearer ' + token,
                 },
                 body: JSON.stringify({
-                    gender: gender,
+                    gender: gender || 'm',
                     phone: number,
                     avatar: 'data:image/png;base64,' + imgBase64
                 })
