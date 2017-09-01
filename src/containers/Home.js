@@ -130,7 +130,6 @@ class Home extends Component {
     )
   }
   render() {
-    console.log(this.state.accessToken)
     return (
       <SideMenu
         menu={<Menu

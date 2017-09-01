@@ -9,11 +9,12 @@ import {
   Button,
   PixelRatio
  } from 'react-native';
-import { Pie } from 'react-native-pathjs-charts'
 import SideMenu from 'react-native-side-menu';
 import api from '../services/api'
 import Header from './shared/Header';
 import Menu from './shared/Menu';
+import ChartView from 'react-native-highcharts';
+
 
 const ACCESS_TOKEN = 'access_token';
 const months = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
@@ -27,11 +28,15 @@ class Stats extends Component {
        id: '',
        accessToken: '',
        stats: [],
-       isOpen: false
+       isOpen: false,
+       statsTest: []
     }
+
+    this.toggle = this.toggle.bind(this)
+    this.updateMenu = this.updateMenu.bind(this)
   }
 
-    toggle() {
+  toggle() {
     this.setState({
       isOpen: !this.state.isOpen
     })
@@ -55,7 +60,25 @@ class Stats extends Component {
           userName: dataUser.data.userName,
           id: dataUser.data._id,
           accessToken,
-          stats: data.stats
+          stats: data.stats,
+          statsTest:[
+              {
+                  "_id": {
+                      "day": 9,
+                      "month": 8,
+                      "year": 2017
+                  },
+                  "totalValue": 0.0009874
+              },
+              {
+                  "_id": {
+                      "day": 8,
+                      "month": 8,
+                      "year": 2017
+                  },
+                  "totalValue": 0.0005076
+              }
+          ],
         })
       }
     } catch (err) {
@@ -65,40 +88,56 @@ class Stats extends Component {
   }
 
   render() {
-      let data = this.state.stats.map((value) => {
-        return ({
-          name: `${value._id.day}-${months[value._id.month - 1]}-${value._id.year}`,
-          total: 1
-        })
-      });
+    const state = this.state.statsTest;
+ var Highcharts='Highcharts';
+    var conf={
+            chart: {
+                type: 'spline',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10,
+            },
+            title: {
+                text: 'Estaisticas del mes'
+            },
+            xAxis: {
 
-
-   let options = {
-      margin: {
-        top: 20,
-        left: 20,
-        right: 20,
-        bottom: 20
-      },
-      width: 350,
-      height: 350,
-      color: '#2980B9',
-      r: 50,
-      R: 150,
-      legendPosition: 'topLeft',
-      animate: {
-        type: 'oneByOne',
-        duration: 200,
-        fillTransition: 3
-      },
-      label: {
-        fontFamily: 'Arial',
-        fontSize: 8,
-        fontWeight: true,
-        color: '#ECF0F1'
-      }
-    }
-
+            },
+            yAxis: {
+                title: {
+                    text: 'BitCoins'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y);
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'Random data',
+                data: (function () {
+                    // generate an array of random data
+                    var data = [],
+                    data = state.map(value => ({
+                        x: `${value._id.day}-${value._id.month}-${value._id.year}`,
+                        y: value.totalValue
+                    }));
+                    return data;
+                }())
+            }]
+        };
     return (
       <SideMenu
         menu={<Menu 
@@ -109,34 +148,8 @@ class Stats extends Component {
         menuPosition='right'
         onChange={(isOpen) => this.updateMenu(isOpen)}
       >
-        <View style={styles.container}>
-          <Header toggle={this.toggle} />
-          <Pie data={data}
-            options={options}
-            accessorKey="population"
-            margin={{top: 20, left: 0, right: 20, bottom: 20}}
-            color="#2980B9"
-            pallete={
-              [
-                {'r':25,'g':99,'b':201},
-                {'r':24,'g':175,'b':35},
-                {'r':190,'g':31,'b':69},
-                {'r':100,'g':36,'b':199},
-                {'r':214,'g':207,'b':32},
-                {'r':198,'g':84,'b':45}
-              ]
-            }
-            r={50}
-            R={150}
-            legendPosition="topLeft"
-            label={{
-              fontFamily: 'Arial',
-              fontSize: 8,
-              fontWeight: true,
-              color: '#ECF0F1'
-            }}
-          />
-        </View>
+        <Header toggle={this.toggle} />
+        <ChartView style={{flex:1}} config={conf} stock={false}></ChartView>
     </SideMenu>
  
     )
